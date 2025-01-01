@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Happy New Year</title>
+    <style>
+        body {
+            margin: 0;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            overflow: hidden;
+            font-family: 'Arial', sans-serif;
+        }
+
+        #container {
+            text-align: center;
+            display: none;
+            z-index: 10;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            font-size: 18px;
+            color: #fff;
+            background: linear-gradient(45deg, #6a11cb, #2575fc);
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            background: linear-gradient(45deg, #2575fc, #6a11cb);
+            transform: scale(1.1);
+        }
+
+        .typewriter {
+            font-size: 6rem;
+            color: #ffffff;
+            font-weight: bold;
+            text-transform: uppercase;
+            animation: bounce 2s infinite, glowCycle 3s infinite;
+        }
+
+        /* Black shadow for specific texts */
+        #goodbyeText, #newYearText {
+            text-shadow: 3px 3px 5px black, 0 0 10px #fff, 0 0 20px #fff, 0 0 30px rgba(255, 255, 255, 0.8), 0 0 40px rgba(255, 255, 255, 1);
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-15px);
+            }
+        }
+
+        @keyframes glowCycle {
+            0%, 100% {
+                text-shadow: 
+                    0 0 20px #201f1f,
+                    0 0 40px rgba(255, 254, 254, 0.8),
+                    0 0 60px rgb(245, 244, 244);
+            }
+            50% {
+                text-shadow: 
+                    0 0 40px #faf5f5,
+                    0 0 80px rgb(252, 248, 248),
+                    0 0 100px rgba(255, 255, 255, 1.2);
+            }
+        }
+
+        @keyframes bounceChar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .sparkle, .confetti {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            animation: floatUp 3s infinite ease-in-out;
+            opacity: 0;
+        }
+
+        @keyframes floatUp {
+            0% {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+            100% {
+                opacity: 0;
+                transform: translateY(-200px) scale(0.5);
+            }
+        }
+
+        .confetti {
+            background-color: #fff;
+            box-shadow: 0 0 5px rgba(255, 255, 255, 0.6);
+        }
+    </style>
+</head>
+<body>
+    <button class="btn" id="startBtn">OPEN</button>
+
+    <div id="container">
+        <div class="typewriter" id="goodbyeText"></div>
+        <div class="typewriter" id="andText"></div>
+        <div class="typewriter" id="newYearText"></div>
+    </div>
+
+    <script>
+        const startBtn = document.getElementById('startBtn');
+        const container = document.getElementById('container');
+        const goodbyeText = document.getElementById('goodbyeText');
+        const andText = document.getElementById('andText');
+        const newYearText = document.getElementById('newYearText');
+        const goodbyeMessage = "GOOD BYE 2024";
+        const andMessage = "AND";
+        const newYearMessage = "HAPPY NEW YEAR";
+
+        // Show container and play typewriter effect
+        startBtn.addEventListener('click', () => {
+            startBtn.style.display = 'none';
+            container.style.display = 'block';
+            typewriterEffect(goodbyeMessage, goodbyeText, 0);
+            createCelebrationEffect();  // Start background celebration effect immediately
+        });
+
+        // Typewriter effect
+        function typewriterEffect(text, element, index = 0) {
+            if (index < text.length) {
+                const span = document.createElement('span');
+                span.textContent = text[index];
+
+                // Add styling for each character
+                span.style.display = 'inline-block';
+                span.style.animation = 'bounceChar 1s ease-in-out infinite';
+                span.style.animationDelay = `${index * 0.1}s`;
+
+                element.appendChild(span);
+                setTimeout(() => typewriterEffect(text, element, index + 1), 150);
+            } else {
+                // After "GOOD BYE 2024" finishes, show "AND"
+                if (element === goodbyeText) {
+                    setTimeout(() => {
+                        typewriterEffect(andMessage, andText, 0);
+                    }, 500);
+                }
+                // After "AND" finishes, show "HAPPY NEW YEAR"
+                if (element === andText) {
+                    setTimeout(() => {
+                        typewriterEffect(newYearMessage, newYearText, 0);
+                        createConfetti();
+                        setInterval(createSparkles, 300);
+                    }, 500);
+                }
+            }
+        }
+
+        // Create confetti particles
+        function createConfetti() {
+            for (let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                document.body.appendChild(confetti);
+
+                confetti.style.left = `${Math.random() * window.innerWidth}px`;
+                confetti.style.top = `${Math.random() * window.innerHeight}px`;
+                confetti.style.animationDuration = `${Math.random() * 3 + 2}s`;
+                confetti.style.backgroundColor = getRandomColor();
+
+                setTimeout(() => confetti.remove(), 5000);
+            }
+        }
+
+        // Create sparkle effects
+        function createSparkles() {
+            const sparkle = document.createElement('div');
+            sparkle.classList.add('sparkle');
+            document.body.appendChild(sparkle);
+
+            sparkle.style.left = `${Math.random() * window.innerWidth}px`;
+            sparkle.style.top = `${Math.random() * window.innerHeight}px`;
+            sparkle.style.animationDuration = `${Math.random() * 3 + 2}s`;
+            sparkle.style.backgroundColor = getRandomColor();
+
+            setTimeout(() => sparkle.remove(), 3000);
+        }
+
+        // Generate random color
+        function getRandomColor() {
+            const colors = ['#00c9ff', '#92fe9d', '#ffe57f', '#ffdb58', '#fff176', '#ffffff'];
+            return colors[Math.floor(Math.random() * colors.length)];
+        }
+
+        // Create the background celebration effect (confetti and sparkles)
+        function createCelebrationEffect() {
+            createConfetti();
+            setInterval(createSparkles, 300);  // Repeated sparkles every 300ms
+        }
+    </script>
+</body>
+</html>
